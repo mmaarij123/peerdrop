@@ -123,3 +123,9 @@ The Compose secret file must be group-readable by GID 1000, which the Node image
 3. Repeat with both devices on the same network if the cross-network attempt uses TURN. To verify a direct path without relay fallback, run the Node app outside this Compose example with `TURN_URLS` unset and `FORCE_RELAY=false`, and require **Direct connection** on both devices. The supplied Compose example requires `TURN_URLS`. Network topology determines whether a direct route is available.
 
 See [architecture.md](dev-docs/architecture.md) for the data flow and [api.md](dev-docs/api.md) for the signaling and DataChannel contracts.
+
+## License
+
+PeerDrop's original code is licensed under the [MIT License](LICENSE).
+
+Third-party components retain their license notices. [FilePizza](licenses/FilePizza.txt) · [Lightswind UI](licenses/Lightswind.txt) · [Kubai Icons](licenses/Kubai-Icons.txt) · [Geist](dist/fonts/LICENSE.txt)

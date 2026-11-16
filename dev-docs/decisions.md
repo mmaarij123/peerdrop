@@ -18,6 +18,11 @@
 
 Add the newest entry first. Record the date, change and reason, verification, and any open work. Only report checks that were run.
 
+### 2026-11-16 · MIT license
+
+- Licensed PeerDrop's original code under MIT with the copyright notice assigned to Maarij. Linked the root license from the README, declared MIT in the npm metadata, and included the notice in the container packaging. Preserved the bundled third-party license notices.
+- Verified the license text, README links, package metadata, and existing notices. The TypeScript check passed.
+
 ### 2026-11-16 · Developer documentation folder
 
 - Moved the 12 project Markdown documents into `dev-docs/` and linked the folder and contributor instructions from the root README. Updated relative links to the moved documents, source files, and licenses.

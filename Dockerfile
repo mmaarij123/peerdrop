@@ -15,6 +15,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/build ./build
 COPY --from=build /app/dist ./dist
+COPY LICENSE ./LICENSE
 COPY licenses ./licenses
 USER node
 EXPOSE 3000
