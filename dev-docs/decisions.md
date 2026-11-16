@@ -18,6 +18,10 @@
 
 Add the newest entry first. Record the date, change and reason, verification, and any open work. Only report checks that were run.
 
+### 2026-11-16 · Public source repository
+
+- Changed the GitHub repository visibility to public at the owner's request. Checked the published branch history for local configuration and recognizable credentials and verified access without signing in. [PeerDrop on GitHub](https://github.com/mmaarij123/peerdrop)
+
 ### 2026-11-16 · MIT license
 
 - Licensed PeerDrop's original code under MIT with the copyright notice assigned to Maarij. Linked the root license from the README, declared MIT in the npm metadata, and included the notice in the container packaging. Preserved the bundled third-party license notices.
