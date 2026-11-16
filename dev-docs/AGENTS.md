@@ -10,7 +10,7 @@ Update every document whose facts, instructions, or scope changed. If only imple
 
 | Change | Update |
 | --- | --- |
-| Install, startup, configuration, or operator instructions | [README.md](README.md) |
+| Install, startup, configuration, or operator instructions | [README.md](../README.md) |
 | Product scope, audience, or milestone | [context.md](context.md) |
 | UI, copy patterns, responsive layout, or accessibility | [design.md](design.md) |
 | Modules, data flow, hosting, or deployment | [architecture.md](architecture.md) |

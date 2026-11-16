@@ -1,6 +1,6 @@
 # PeerDrop file transfer protocol
 
-PeerDrop uses one invite, one sender, one recipient, and one file per session. Fastify coordinates the invite and connection. The browsers exchange file data over a reliable, ordered WebRTC DataChannel. PeerDrop adapts FilePizza's in-memory channel repository and PeerJS setup and defines its own transfer messages. [FilePizza protocol guide](https://github.com/kern/filepizza/blob/main/docs/file-transfer-protocol.md) · [PeerDrop's FilePizza adaptations](../src/filepizza/README.md)
+PeerDrop uses one invite, one sender, one recipient, and one file per session. Fastify coordinates the invite and connection. The browsers exchange file data over a reliable, ordered WebRTC DataChannel. PeerDrop adapts FilePizza's in-memory channel repository and PeerJS setup and defines its own transfer messages. [FilePizza protocol guide](https://github.com/kern/filepizza/blob/main/docs/file-transfer-protocol.md) · [PeerDrop's FilePizza adaptations](filepizza.md)
 
 ## Architecture
 
@@ -20,7 +20,7 @@ The app server stores temporary session state and forwards connection messages. 
 1. The sender selects a file and sends an empty `POST /api/transfers`. The app returns `sessionId`, `senderToken`, `inviteUrl`, and `expiresAt`. The invite contains the recipient's token in the URL fragment.
 2. Each browser opens the control WebSocket at `/ws/signaling/<sessionId>` and sends `auth` with its own token. The app replies `joined`. The recipient's browser clears the fragment after that reply.
 3. When both roles have joined, the app sends `ready` with WebRTC settings, separate PeerJS credentials, and a shared transfer key. The sender registers with PeerJS and sends `peer_ready` over the control socket. The app forwards that event to the recipient.
-4. Once the recipient registers with PeerJS and receives `peer_ready`, it sends the WebRTC offer. The sender answers. PeerJS exchanges ICE candidates so the browsers can choose a route. The sender checks the transfer key before using the `peerdrop-file` DataChannel. [HTTP and WebSocket contracts](../api.md)
+4. Once the recipient registers with PeerJS and receives `peer_ready`, it sends the WebRTC offer. The sender answers. PeerJS exchanges ICE candidates so the browsers can choose a route. The sender checks the transfer key before using the `peerdrop-file` DataChannel. [HTTP and WebSocket contracts](api.md)
 
 ## DataChannel messages
 
@@ -93,4 +93,4 @@ Sender    → Recipient  {"type":"end","transferId":"T"}
 Recipient → Sender     {"type":"ack","transferId":"T"}
 ```
 
-See [browser connection setup](../dist/connection.js), [DataChannel implementation](../dist/channel.js), and the [API reference](../api.md) for implementation details.
+See [browser connection setup](../dist/connection.js), [DataChannel implementation](../dist/channel.js), and the [API reference](api.md) for implementation details.

@@ -12,10 +12,16 @@
 | 006 | 2026-11-13 | Balance new invites with Caddy, pin signaling to the owning process, and share request quotas through Redis. | IP or cookie affinity can separate peers on different networks. A session ID prefix routes both peers to the correct process while Redis makes quota decisions consistent across the pool. |
 | 007 | 2026-11-14 | Reuse FilePizza's in-memory channel repository and PeerJS signaling behind PeerDrop's invite authorization. | Running upstream unchanged would replace the PeerDrop interface and expose a different channel API. Adapting the backend keeps the existing invite and receive flow while using FilePizza's negotiation stack. |
 | 008 | 2026-11-14 | Render Lightswind components and Kubai icons at build time. | Fastify can serve the generated pages on the existing routes, while the native browser modules continue to manage interactive transfer state. |
+| 009 | 2026-11-16 | Group project documentation under `dev-docs/` and keep the main README at the repository root. | Readers can find the setup from the README and browse the developer references in one directory. This supersedes the root file layout in decision 003. |
 
 ## Progress log
 
 Add the newest entry first. Record the date, change and reason, verification, and any open work. Only report checks that were run.
+
+### 2026-11-16 · Developer documentation folder
+
+- Moved the 12 project Markdown documents into `dev-docs/` and linked the folder and contributor instructions from the root README. Updated relative links to the moved documents, source files, and licenses.
+- Verified all 49 local Markdown links and confirmed the main README is the only tracked Markdown file outside `dev-docs/`.
 
 ### 2026-11-16 · Detailed file transfer protocol guide
 

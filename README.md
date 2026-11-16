@@ -4,7 +4,11 @@ PeerDrop sends one file from a sender's browser to a recipient's browser. The se
 
 ## File transfer protocol
 
-PeerDrop adapts FilePizza's channel repository and PeerJS signaling setup. After the recipient accepts, the browsers exchange file bytes on an ordered WebRTC DataChannel. Traffic goes directly between the browsers when possible or through a TURN relay when needed. [PeerDrop protocol guide and diagrams](docs/file-transfer-protocol.md) · [FilePizza adaptations](src/filepizza/README.md) · [FilePizza license](licenses/FilePizza.txt)
+PeerDrop adapts FilePizza's channel repository and PeerJS signaling setup. After the recipient accepts, the browsers exchange file bytes on an ordered WebRTC DataChannel. Traffic goes directly between the browsers when possible or through a TURN relay when needed. [PeerDrop protocol guide and diagrams](dev-docs/file-transfer-protocol.md) · [FilePizza adaptations](dev-docs/filepizza.md) · [FilePizza license](licenses/FilePizza.txt)
+
+## Developer documentation
+
+The `dev-docs/` folder contains the architecture, API, security, testing, and project history. Start with the contributor and agent instructions when working on PeerDrop. [Developer docs](dev-docs/) · [Contributor and agent instructions](dev-docs/AGENTS.md)
 
 ## Run locally
 
@@ -81,13 +85,13 @@ npx playwright install chromium
 npm run test:e2e -- direct
 ```
 
-`PEERDROP_BROWSER` can point to an installed Chromium-based browser executable. For a separate relay-only test, start a TURN service reachable by the test browser with TURN REST shared-secret authentication. Set `TURN_URLS` and `TURN_SHARED_SECRET` in the test process environment, then run `npm run test:e2e -- relay`. The test forces relay, checks both browsers report **Assisted connection**, and compares the saved file with the original. The direct suite leaves STUN and TURN unset and checks **Direct connection** on the local machine. See [testing.md](testing.md) for the verification record.
+`PEERDROP_BROWSER` can point to an installed Chromium-based browser executable. For a separate relay-only test, start a TURN service reachable by the test browser with TURN REST shared-secret authentication. Set `TURN_URLS` and `TURN_SHARED_SECRET` in the test process environment, then run `npm run test:e2e -- relay`. The test forces relay, checks both browsers report **Assisted connection**, and compares the saved file with the original. The direct suite leaves STUN and TURN unset and checks **Direct connection** on the local machine. See [testing.md](dev-docs/testing.md) for the verification record.
 
 ## Linux VPS deployment example
 
 Include the `frontend/` and `dist/` directories in the source you copy to the VPS. The Docker build generates the pages and styles, and copies the browser transfer modules and fonts from `dist/`.
 
-Review [security.md](security.md) before public rollout. This example uses two Fastify instances, Caddy for HTTPS and WSS, private Redis for rate counters, and coturn on the VPS host network. The public static landing release is separate.
+Review [security.md](dev-docs/security.md) before public rollout. This example uses two Fastify instances, Caddy for HTTPS and WSS, private Redis for rate counters, and coturn on the VPS host network. The public static landing release is separate.
 
 1. Point `drop.example.com` and `turn.example.com` A records to the VPS public IPv4 address. Replace the example domains throughout the `.env` values. Use DNS-only records for TURN. On this IPv4 example, publish AAAA records only after configuring and testing IPv6.
 2. Open inbound TCP **80 and 443** for Caddy, UDP and TCP **3478** for STUN/TURN, and UDP **49160–49259** for TURN relay allocations. Apply the rules at the VPS and cloud firewall. If the VPS is behind NAT, forward the same ports without translation. Allow coturn to send UDP from the relay range to remote clients. Keep port 3000 internal.
@@ -118,4 +122,4 @@ The Compose secret file must be group-readable by GID 1000, which the Node image
 2. Run a separate relay-only round by setting `FORCE_RELAY=true` and applying it with `docker compose up -d app app2`. Start a fresh transfer, require **Assisted connection** on both devices, and compare hashes again. Set `FORCE_RELAY=false` and run the command again after the test. Recreating both app instances invalidates outstanding invites.
 3. Repeat with both devices on the same network if the cross-network attempt uses TURN. To verify a direct path without relay fallback, run the Node app outside this Compose example with `TURN_URLS` unset and `FORCE_RELAY=false`, and require **Direct connection** on both devices. The supplied Compose example requires `TURN_URLS`. Network topology determines whether a direct route is available.
 
-See [architecture.md](architecture.md) for the data flow and [api.md](api.md) for the signaling and DataChannel contracts.
+See [architecture.md](dev-docs/architecture.md) for the data flow and [api.md](dev-docs/api.md) for the signaling and DataChannel contracts.

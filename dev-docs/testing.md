@@ -2,7 +2,7 @@
 
 ## Commands
 
-Use the local setup in [README.md](README.md). Run `npm run check` for strict server and frontend TypeScript, `npm test` for Node integration and protocol checks, and `npm run test:e2e -- direct` for browser checks. Install Chromium with `npx playwright install chromium` or set `PEERDROP_BROWSER` to a compatible browser executable. Use `npm run test:e2e -- relay` with a reachable TURN REST server and its test-only environment settings for a separate forced-relay check.
+Use the local setup in [README.md](../README.md). Run `npm run check` for strict server and frontend TypeScript, `npm test` for Node integration and protocol checks, and `npm run test:e2e -- direct` for browser checks. Install Chromium with `npx playwright install chromium` or set `PEERDROP_BROWSER` to a compatible browser executable. Use `npm run test:e2e -- relay` with a reachable TURN REST server and its test-only environment settings for a separate forced-relay check.
 
 ## What to cover
 
@@ -24,7 +24,7 @@ On November 14, 2026, the TypeScript build and check and all 11 Node tests passe
 
 Caddy configuration validation passed. A local Caddy and Redis pool with two Fastify processes passed owner routing, shared throttling, failover for new invites, and fail-closed behavior when Redis was unavailable. A browser download through that pool matched the original file byte for byte.
 
-Running the public Compose stack, verifying coturn, checking public certificates and firewall rules, and transferring between Wi-Fi and mobile data remain to be verified. Follow the deployment steps in [README.md](README.md).
+Running the public Compose stack, verifying coturn, checking public certificates and firewall rules, and transferring between Wi-Fi and mobile data remain to be verified. Follow the deployment steps in [README.md](../README.md).
 
 ## Earlier cross-browser verification
 

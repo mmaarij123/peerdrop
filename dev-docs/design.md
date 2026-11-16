@@ -13,7 +13,7 @@
 | `--field` | `#EEF1FC` | `#22283A` | Preview field and file picker |
 | `--line` | `#DCE1EC` | `#343B4E` | Separators and panel borders |
 
-Use the local Geist variable font and fall back to the system sans-serif. Use strong heading weights and readable body line heights. Keep the content within 1,200 px and use the responsive gutters in [styles.css](frontend/styles.css). The hero pairs copy with the preview and stacks at 760 px. Present use cases as a divided list, with the section title beside it on wider screens.
+Use the local Geist variable font and fall back to the system sans-serif. Use strong heading weights and readable body line heights. Keep the content within 1,200 px and use the responsive gutters in [styles.css](../frontend/styles.css). The hero pairs copy with the preview and stacks at 760 px. Present use cases as a divided list, with the section title beside it on wider screens.
 
 ## Component patterns
 
@@ -41,6 +41,6 @@ Use the local Geist variable font and fall back to the system sans-serif. Use st
 
 ## References
 
-PeerDrop uses locally vendored Lightswind Button, Card, and Badge components. Their theme and layout rules live in [styles.css](frontend/styles.css). Kubai SVG artwork is embedded in the generated pages. [Lightswind UI](https://lightswind.com/components/introduction) · [Kubai Icons](https://github.com/kubai087/kubai-icons)
+PeerDrop uses locally vendored Lightswind Button, Card, and Badge components. Their theme and layout rules live in [styles.css](../frontend/styles.css). Kubai SVG artwork is embedded in the generated pages. [Lightswind UI](https://lightswind.com/components/introduction) · [Kubai Icons](https://github.com/kubai087/kubai-icons)
 
 The redesign takes its pared-back navigation and focused hierarchy from the minimalist design gallery. [Dribbble minimalist UI designs](https://dribbble.com/search/minimalist-ui-design) · [Provantage by six2eight](https://dribbble.com/shots/25288689-Business-consultation-website-homepage-design)
