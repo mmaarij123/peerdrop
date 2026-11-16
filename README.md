@@ -2,7 +2,17 @@
 
 PeerDrop sends one file from a sender's browser to a recipient's browser. The sender shares a one-time invite. The recipient reviews the file, accepts, and saves it after transfer. Both tabs stay open until delivery finishes.
 
-The PeerDrop interface runs on a Fastify app that uses FilePizza's channel repository and PeerJS signaling setup. Both WebSocket routes use the same origin and port as the app. [Channel source and adaptations](src/filepizza/README.md) · [Upstream PeerJS server setup](https://github.com/kern/filepizza/blob/1e4d02fa91527d8dc83f4094ca394f8c29a88b56/bin/peerjs.js) · [FilePizza license](licenses/FilePizza.txt)
+## File transfer protocol
+
+PeerDrop uses the same browser-to-browser approach as FilePizza. It adapts FilePizza's in-memory channel repository and PeerJS signaling setup, with its own invite, consent, and delivery flow. [FilePizza](https://github.com/kern/filepizza) · [PeerDrop's adaptations](src/filepizza/README.md) · [FilePizza license](licenses/FilePizza.txt)
+
+1. **Create the invite.** The sender selects a file. PeerDrop creates a temporary session and returns a one-time link for the recipient.
+2. **Connect the browsers.** The recipient opens the link. The browsers use WebSocket signaling to find a route to each other and open a reliable, ordered WebRTC DataChannel. They connect directly when possible. If a direct connection fails and TURN is configured, a TURN server can relay the encrypted traffic.
+3. **Ask for consent.** The sender shares the filename, size, and type over the DataChannel. The recipient sees the filename and size and chooses **Accept** or **Decline**. File contents start moving only after acceptance.
+4. **Send the file in chunks.** The sender reads slices of up to 16 KiB and sends them in order, pausing if too many bytes are queued. The recipient assembles the data in browser memory or uses browser-managed temporary storage for files over 32 MiB.
+5. **Confirm and save.** The recipient's browser checks the received byte count, prepares the download, and acknowledges receipt. That acknowledgment allows the sender to see **Delivered**. The recipient then uses **Save file** to write a copy to their device.
+
+The PeerDrop app server coordinates invites and session status. It accepts no file uploads. [Message formats and flow control](api.md#datachannel)
 
 ## Run locally
 

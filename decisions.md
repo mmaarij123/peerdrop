@@ -17,6 +17,10 @@
 
 Add the newest entry first. Record the date, change and reason, verification, and any open work. Only report checks that were run.
 
+### 2026-11-16 · File transfer protocol in the README
+
+- Documented the invite, FilePizza and PeerJS signaling, recipient consent, WebRTC chunks, TURN relay, and delivery confirmation in the README. Checked the explanation against the browser modules and API contract and checked the Markdown links and diff whitespace.
+
 ### 2026-11-16 · Project audit and private GitHub handoff
 
 - Fixed a landing-page typo and made download names safe for long Unicode filenames and reserved device names. Removed unused Lightswind component variants and Kubai SVGs and dropped a development dependency used only by those variants.
