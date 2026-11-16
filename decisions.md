@@ -17,6 +17,11 @@
 
 Add the newest entry first. Record the date, change and reason, verification, and any open work. Only report checks that were run.
 
+### 2026-11-16 · Detailed file transfer protocol guide
+
+- Linked a dedicated protocol guide from the README. Following the FilePizza guide's format, it includes PeerDrop's architecture, signaling steps, message table, sequence diagram, terminal outcomes, and a sample exchange.
+- Verified local Markdown links and fences, the example's byte counts, and the documented DataChannel message names.
+
 ### 2026-11-16 · File transfer protocol in the README
 
 - Documented the invite, FilePizza and PeerJS signaling, recipient consent, WebRTC chunks, TURN relay, and delivery confirmation in the README. Checked the explanation against the browser modules and API contract and checked the Markdown links and diff whitespace.

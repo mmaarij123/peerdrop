@@ -4,15 +4,7 @@ PeerDrop sends one file from a sender's browser to a recipient's browser. The se
 
 ## File transfer protocol
 
-PeerDrop uses the same browser-to-browser approach as FilePizza. It adapts FilePizza's in-memory channel repository and PeerJS signaling setup, with its own invite, consent, and delivery flow. [FilePizza](https://github.com/kern/filepizza) · [PeerDrop's adaptations](src/filepizza/README.md) · [FilePizza license](licenses/FilePizza.txt)
-
-1. **Create the invite.** The sender selects a file. PeerDrop creates a temporary session and returns a one-time link for the recipient.
-2. **Connect the browsers.** The recipient opens the link. The browsers use WebSocket signaling to find a route to each other and open a reliable, ordered WebRTC DataChannel. They connect directly when possible. If a direct connection fails and TURN is configured, a TURN server can relay the encrypted traffic.
-3. **Ask for consent.** The sender shares the filename, size, and type over the DataChannel. The recipient sees the filename and size and chooses **Accept** or **Decline**. File contents start moving only after acceptance.
-4. **Send the file in chunks.** The sender reads slices of up to 16 KiB and sends them in order, pausing if too many bytes are queued. The recipient assembles the data in browser memory or uses browser-managed temporary storage for files over 32 MiB.
-5. **Confirm and save.** The recipient's browser checks the received byte count, prepares the download, and acknowledges receipt. That acknowledgment allows the sender to see **Delivered**. The recipient then uses **Save file** to write a copy to their device.
-
-The PeerDrop app server coordinates invites and session status. It accepts no file uploads. [Message formats and flow control](api.md#datachannel)
+PeerDrop adapts FilePizza's channel repository and PeerJS signaling setup. After the recipient accepts, the browsers exchange file bytes on an ordered WebRTC DataChannel. Traffic goes directly between the browsers when possible or through a TURN relay when needed. [PeerDrop protocol guide and diagrams](docs/file-transfer-protocol.md) · [FilePizza adaptations](src/filepizza/README.md) · [FilePizza license](licenses/FilePizza.txt)
 
 ## Run locally
 
