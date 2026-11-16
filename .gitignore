@@ -1,0 +1,23 @@
+# Dependencies and generated server output
+node_modules/
+/build/
+
+# Local configuration and secrets
+.env
+.env.*
+!/.env.example
+**/.secrets/**
+!/.secrets/.gitkeep
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local reports and editor or OS files
+playwright-report/
+test-results/
+coverage/
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db

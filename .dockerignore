@@ -1,0 +1,8 @@
+.git
+.openai
+.env
+.env.*
+.secrets
+node_modules
+build
+tests

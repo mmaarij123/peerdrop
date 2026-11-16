@@ -1,0 +1,138 @@
+x-app-environment: &app-environment
+  PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN in .env}
+  TRUST_PROXY_IP: 172.28.231.2
+  MAX_FILE_MIB: ${MAX_FILE_MIB:-}
+  INVITE_TTL_SECONDS: ${INVITE_TTL_SECONDS:-600}
+  ACTIVE_TTL_SECONDS: ${ACTIVE_TTL_SECONDS:-7200}
+  STUN_URLS: ${STUN_URLS:-}
+  TURN_URLS: ${TURN_URLS:?Set TURN_URLS in .env}
+  TURN_SHARED_SECRET_FILE: /run/secrets/turn_shared_secret
+  RATE_LIMIT_REDIS_URL: redis://redis:6379
+  RATE_LIMIT_WINDOW_SECONDS: ${RATE_LIMIT_WINDOW_SECONDS:-60}
+  RATE_LIMIT_CREATE: ${RATE_LIMIT_CREATE:-20}
+  RATE_LIMIT_JOIN: ${RATE_LIMIT_JOIN:-60}
+  RATE_LIMIT_SIGNAL_BURST: ${RATE_LIMIT_SIGNAL_BURST:-100}
+  RATE_LIMIT_SIGNAL_PER_SECOND: ${RATE_LIMIT_SIGNAL_PER_SECOND:-25}
+  FORCE_RELAY: ${FORCE_RELAY:-false}
+
+x-app: &app
+  build: .
+  restart: unless-stopped
+  secrets:
+    - turn_shared_secret
+  depends_on:
+    redis:
+      condition: service_healthy
+  healthcheck:
+    test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/healthz').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"]
+    interval: 15s
+    timeout: 3s
+  networks:
+    - web
+    - rate-store
+
+services:
+  app:
+    <<: *app
+    environment:
+      <<: *app-environment
+      SIGNALING_NODE_ID: '01'
+
+  app2:
+    <<: *app
+    environment:
+      <<: *app-environment
+      SIGNALING_NODE_ID: '02'
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command: [redis-server, --save, '', --appendonly, 'no', --maxmemory, 64mb, --maxmemory-policy, noeviction]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 2s
+    networks:
+      - rate-store
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_started
+      app2:
+        condition: service_started
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      web:
+        ipv4_address: 172.28.231.2
+
+  coturn:
+    image: coturn/coturn:4.18.0
+    restart: unless-stopped
+    network_mode: host
+    secrets:
+      - turn_shared_secret
+    group_add:
+      - '1000'
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./deploy/start-coturn.sh:/usr/local/bin/start-peerdrop-coturn:ro
+    entrypoint: ["/bin/sh", "/usr/local/bin/start-peerdrop-coturn"]
+    command:
+      - --realm=${TURN_DOMAIN:?Set TURN_DOMAIN in .env}
+      - --listening-ip=${TURN_PRIVATE_IP:?Set TURN_PRIVATE_IP in .env}
+      - --relay-ip=${TURN_PRIVATE_IP}
+      - --external-ip=${TURN_PUBLIC_IP:?Set TURN_PUBLIC_IP in .env}/${TURN_PRIVATE_IP}
+      - --listening-port=3478
+      - --min-port=49160
+      - --max-port=49259
+      - --use-auth-secret
+      - --fingerprint
+      - --no-multicast-peers
+      - --denied-peer-ip=0.0.0.0-0.255.255.255
+      - --denied-peer-ip=10.0.0.0-10.255.255.255
+      - --denied-peer-ip=100.64.0.0-100.127.255.255
+      - --denied-peer-ip=127.0.0.0-127.255.255.255
+      - --denied-peer-ip=169.254.0.0-169.254.255.255
+      - --denied-peer-ip=172.16.0.0-172.31.255.255
+      - --denied-peer-ip=192.168.0.0-192.168.255.255
+      - --denied-peer-ip=198.18.0.0-198.19.255.255
+      - --denied-peer-ip=224.0.0.0-255.255.255.255
+      - --user-quota=4
+      - --total-quota=96
+      - --no-tcp-relay
+      - --no-tls
+      - --no-dtls
+      - --no-cli
+      - --userdb=/tmp/peerdrop-turn.sqlite
+      - --pidfile=/tmp/peerdrop-turn.pid
+      - --no-software-attribute
+      - --log-file=/dev/null
+      - --no-stdout-log
+
+networks:
+  web:
+    ipam:
+      config:
+        - subnet: 172.28.231.0/24
+  rate-store:
+    internal: true
+
+secrets:
+  turn_shared_secret:
+    file: ${TURN_SECRET_SOURCE_FILE:-./.secrets/turn_shared_secret}
+
+volumes:
+  caddy-data:
+  caddy-config:
